@@ -21,7 +21,7 @@ async function run(){
 
         const database = client.db("TravelRide");
         const toursCollections = database.collection("Tours");
-        const usersCollections = database.collection("Users");
+        const bookingsCollection = database.collection("Users");
 
 
         // GET TOUR API 
@@ -31,10 +31,10 @@ async function run(){
             res.send(tours);
         });
         // GET USER API 
-        app.get('/users', async (req, res) => {
-            const cursor =  usersCollections.find({});
-            const users = await cursor.toArray();
-            res.send(users);
+        app.get('/bookings', async (req, res) => {
+            const cursor =  bookingsCollection.find({});
+            const bookings = await cursor.toArray();
+            res.send(bookings);
         });
 
         // GET SINGLE SERVICE  
@@ -54,21 +54,21 @@ async function run(){
             const result = await toursCollections.insertOne(tours);
             res.json(result);
         })
+
         // post user api
-        app.post('/users', async(req,res)=>{
-            // console.log('hitting user: ',req.body);
-            const users = req.body;
-            const result = await usersCollections.insertOne(users);
+        app.post('/bookings', async(req,res)=>{
+            const bookings = req.body;
+            const result = await bookingsCollection.insertOne(bookings);
             res.json(result);
         })
 
 
         //DELETE API
-        app.delete('/users/:id', async (req, res) => {
+        app.delete('/bookings/:id', async (req, res) => {
             const id = req.params.id;
             
             const query = {_id: ObjectId(id)};
-            const result = await usersCollections.deleteOne(query);
+            const result = await bookingsCollection.deleteOne(query);
 
             console.log(query,result);
             res.json(1);
