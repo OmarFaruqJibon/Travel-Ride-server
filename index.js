@@ -23,21 +23,20 @@ async function run(){
         const toursCollections = database.collection("Tours");
         const bookingsCollection = database.collection("Users");
 
-
         // GET TOUR API 
         app.get('/addTour', async (req, res) => {
             const cursor =  toursCollections.find({});
             const tours = await cursor.toArray();
             res.send(tours);
         });
-        // GET USER API 
+        // GET BOOKING API 
         app.get('/bookings', async (req, res) => {
             const cursor =  bookingsCollection.find({});
             const bookings = await cursor.toArray();
             res.send(bookings);
         });
 
-        // GET SINGLE SERVICE  
+        // GET SINGLE BOOKING  
       app.get('/tourDetails/:id', async (req, res) => {
         const id = req.params.id;
         console.log('hitting single tour ',id);
@@ -46,37 +45,28 @@ async function run(){
         res.json(tour);
       });
 
-
         // post tour api
         app.post('/addTour', async(req,res)=>{
-            // console.log(req.body);
             const tours = req.body;
             const result = await toursCollections.insertOne(tours);
             res.json(result);
         })
 
-        // post user api
+        // post BOOKING api
         app.post('/bookings', async(req,res)=>{
             const bookings = req.body;
             const result = await bookingsCollection.insertOne(bookings);
             res.json(result);
         })
 
-
         //DELETE API
         app.delete('/bookings/:id', async (req, res) => {
             const id = req.params.id;
-            
             const query = {_id: ObjectId(id)};
             const result = await bookingsCollection.deleteOne(query);
-
             console.log(query,result);
             res.json(1);
         })
-
-
-
-
 
     }
     finally{
@@ -84,7 +74,6 @@ async function run(){
     }
 }
 run().catch(console.dir);
-
 
 
 app.get('/', (req,res)=>{
